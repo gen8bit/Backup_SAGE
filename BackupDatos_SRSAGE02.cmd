@@ -1,7 +1,7 @@
 CLS
 @ECHO OFF
 COLOR 0A
-SET INICIO= %date%-%time:~0,-6%
+SET STARTSCRIPT= %date%-%time:~0,-6%
 PROMPT $G
 TITLE -=BACKUP data SRSAGE02
 SET COPYCMD=Y
@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.6
+@ECHO Version 1.7
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -24,7 +24,7 @@ SET COPYCMD=Y
 PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
 
-REM El disco USB destino tiene que estar pinchado en la maquina que ejecuta este script y tener la letra K:\
+REM The destination USB disk has to be in the machine that executes this script whit the letter K:
 
 
 
@@ -38,9 +38,9 @@ SET OnlyDate=%date:/=-%
 
 
 @ECHO =====================================================================================
-@ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ]
-@ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ]
-@ECHO DESTINO: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate% ]
+@ECHO SOURCE:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ]
+@ECHO SOURCE:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ]
+@ECHO TARGET: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate% ]
 @ECHO =====================================================================================
 @ECHO.
 @ECHO.
@@ -147,7 +147,7 @@ SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO.
 @ECHO.
 
-SET FIN= %date%-%time:~0,-6%
+SET ENDSCRIPT= %date%-%time:~0,-6%
 
 
 
@@ -168,8 +168,8 @@ DEL bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
-@ECHO INICIO: %INICIO% >>bodymail.txt
-@ECHO FIN:    %FIN% >>bodymail.txt
+@ECHO START: %STARTSCRIPT% >>bodymail.txt
+@ECHO END:    %ENDSCRIPT% >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO. >>bodymail.txt
@@ -191,10 +191,10 @@ BLAT bodymail.txt -subject "Fin del Backup de datos SRSAGE02 %OnlyDate%" -tf Ema
 
 @ECHO.
 @ECHO ===============================
-@ECHO FIN DEL SCRIPT
+@ECHO END OF SCRIPT
 @ECHO ===============================
-@ECHO INICIO: %INICIO%
-@ECHO FIN:    %FIN%
+@ECHO START: %STARTSCRIPT%
+@ECHO END:    %ENDSCRIPT%
 @ECHO ===============================
 @ECHO.
 PING 127.0.0.1 >NULL
