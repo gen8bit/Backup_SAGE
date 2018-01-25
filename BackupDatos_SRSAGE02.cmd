@@ -14,8 +14,8 @@ SET COPYCMD=Y
 @ECHO Author: Angel Pescador Portas
 @ECHO email: apescador@previlabor.com
 @ECHO email: tic@previlabor.com
-@ECHO scripts name: BackupDatos_SRSAGE02.cmd
-@ECHO Location: %~d0%~p0%0
+@ECHO scripts name: %0
+@ECHO Location: %~d0%~p0
 @ECHO Version 1.8
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
@@ -34,17 +34,19 @@ SET _my_datetime=%_my_datetime:.=_%
 SET OnlyDate=%date:/=-%
 
 
+
 REM VARIABLES (Change and review please)
 REM ************************************
-SET SOURCEDIR1 = "\\192.168.110.49\D$\SAGE\PREVX3"
-SET SOURCEDIR2 = "\\192.168.110.58\D$\SAGE\SafeX3\MongoDB"
-SET TARGETDIR = "\\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate%"
-SET LABEL1 = "Disco D: SRSAGE02"
-SET LABEL2 = "Disco USB K: SRVM02"
-SET LABEL3 =
-SET EMAIL_FROM = "Backup_Datos_SRSAGE02@previlabor.com"
-SET SUBJECT_EMAIL = "Fin del Backup de datos SRSAGE02 %OnlyDate%"
-SET SMTP_SERVER = "previlabor-com.mail.protection.outlook.com"
+SET SOURCEDIR1=\\192.168.110.49\D$\SAGE\PREVX3
+SET SOURCEDIR2=\\192.168.110.58\D$\SAGE\SafeX3\MongoDB
+SET TARGETDIR=\\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate%
+SET LABEL1=Disco D: SRSAGE02
+SET LABEL2=Disco USB K: SRVM02
+SET LABEL3=
+SET EMAIL_FROM=Backup_Datos_SRSAGE02@previlabor.com
+SET SUBJECT_EMAIL=Fin del Backup de datos SRSAGE02 %OnlyDate%
+SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
+
 
 
 @ECHO =====================================================================================
@@ -54,13 +56,6 @@ SET SMTP_SERVER = "previlabor-com.mail.protection.outlook.com"
 @ECHO =====================================================================================
 @ECHO.
 @ECHO.
-
-
-
-ECHO S|NET USE S: /DELETE /Y  2>NULL
-NET USE S: \\192.168.110.49\D$  2>NULL
-PING 127.0.0.1 >NULL
-
 
 
 @ECHO Stopping Services
@@ -117,11 +112,6 @@ MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 .\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@exclude.txt -pTxindoki1346 -mhe -bb 7za_log_SafeX3.txt
 @ECHO.
 @ECHO.
-
-
-
-ECHO S|NET USE S: /DELETE 2>NULL
-PING 127.0.0.1 >NULL
 
 
 
@@ -184,6 +174,9 @@ DEL bodymail.txt
 @ECHO Este correo esta automatizado, no responda a la direccion de origen. >>bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO. >>bodymail.txt
+@ECHO ===============================  >>bodymail.txt
+@ECHO scripts name: %0 >>bodymail.txt
+@ECHO Location: %~d0%~p0 >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO START: %STARTSCRIPT% >>bodymail.txt
 @ECHO END:   %ENDSCRIPT% >>bodymail.txt
