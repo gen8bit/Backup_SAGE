@@ -14,9 +14,9 @@ SET COPYCMD=Y
 @ECHO Author: Angel Pescador Portas
 @ECHO email: apescador@previlabor.com
 @ECHO email: tic@previlabor.com
-@ECHO scripts name: BackupDatos_SRSAGE02_ROBOCOPY.cmd
+@ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.0
+@ECHO Version 1.1
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
