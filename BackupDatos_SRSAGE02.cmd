@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.2
+@ECHO Version 1.3
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -80,6 +80,7 @@ SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA"
 PING 127.0.0.1 -n 10>NULL
 
 
+
 @ECHO ==================
 @ECHO HACIENDO BACKUP...
 @ECHO ==================
@@ -89,8 +90,11 @@ PING 127.0.0.1 -n 10>NULL
 
 
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
-ROBOCOPY "S:\SAGE\PREVX3" "K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3" /MIR /NJH /NJS /R:1 /W:1 /MT:8 /XD S:\SAGE\PREVX3\folders\PREVILAB\TRA\ S:\SAGE\PREVX3\folders\PREVILAB\SVG\ S:\SAGE\PREVX3\folders\PREVILAB\SVG_ADOCCLB\ S:\SAGE\PREVX3\folders\PREVILAB\SVG77701\ S:\SAGE\PREVX3\folders\COPIA\ S:\SAGE\PREVX3\folders\PROTO D:\SAGE\PREVX3\folders\COPIA S:\SAGE\PREVX3\folders\SEED S:\SAGE\PREVX3\folders\X3_PUB\PROTO S:\SAGE\PREVX3\folders\X3_PUB\COPIA S:\SAGE\PREVX3\folders\X3_PUB\SEED
-ROBOCOPY "S:\SAGE\SafeX3\MongoDB" "K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB" /MIR /NJH /NJS /R:1 /W:1 /MT:8
+
+
+C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
+
+C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB\MongoDB.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
 
 
 
@@ -123,7 +127,6 @@ TITLE -=COMPRIMIENDO BACKUPS SRSAGE02=-
 
 K:
 CD \BackupDatos\SRSAGE02\%OnlyDate%
-
 
 
 
