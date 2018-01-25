@@ -3,7 +3,7 @@ CLS
 COLOR 0A
 SET STARTSCRIPT= %date%-%time:~0,-6%
 PROMPT $G
-TITLE -=BACKUP data SRSAGE02
+TITLE -=BACKUP data SRSAGE02=-
 SET COPYCMD=Y
 
 
@@ -15,8 +15,8 @@ SET COPYCMD=Y
 @ECHO email: apescador@previlabor.com
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
-@ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.7
+@ECHO Location: %~d0%~p0%0
+@ECHO Version 1.8
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -26,8 +26,6 @@ PING 127.0.0.1 >NULL
 
 REM The destination USB disk has to be in the machine that executes this script whit the letter K:
 
-
-
 SET _my_datetime=%date%_%time%
 SET _my_datetime=%_my_datetime: =_%
 SET _my_datetime=%_my_datetime::=%
@@ -36,14 +34,27 @@ SET _my_datetime=%_my_datetime:.=_%
 SET OnlyDate=%date:/=-%
 
 
+REM VARIABLES (Change and review please)
+REM ************************************
+SET SOURCEDIR1 = "\\192.168.110.49\D$\SAGE\PREVX3"
+SET SOURCEDIR2 = "\\192.168.110.58\D$\SAGE\SafeX3\MongoDB"
+SET TARGETDIR = "\\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate%"
+SET LABEL1 = "Disco D: SRSAGE02"
+SET LABEL2 = "Disco USB K: SRVM02"
+SET LABEL3 =
+SET EMAIL_FROM = "Backup_Datos_SRSAGE02@previlabor.com"
+SET SUBJECT_EMAIL = "Fin del Backup de datos SRSAGE02 %OnlyDate%"
+SET SMTP_SERVER = "previlabor-com.mail.protection.outlook.com"
+
 
 @ECHO =====================================================================================
-@ECHO SOURCE:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ]
-@ECHO SOURCE:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ]
-@ECHO TARGET: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate% ]
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR1% ]
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR2% ]
+@ECHO TARGET:  [ %LABEL2% %TARGETDIR% ]
 @ECHO =====================================================================================
 @ECHO.
 @ECHO.
+
 
 
 ECHO S|NET USE S: /DELETE /Y  2>NULL
@@ -101,8 +112,9 @@ PING 127.0.0.1 -n 120 >NULL
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
-C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe -bb C:\Scripts\BackupSAGE02\7za_log_PREVX3.txt
-C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3\SafeX3.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe -bb C:\Scripts\BackupSAGE02\7za_log_SafeX3.txt
+
+.\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3.7z %SOURCEDIR1%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@exclude.txt -pTxindoki1346 -mhe -bb 7za_log_PREVX3.txt
+.\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@exclude.txt -pTxindoki1346 -mhe -bb 7za_log_SafeX3.txt
 @ECHO.
 @ECHO.
 
@@ -112,6 +124,9 @@ ECHO S|NET USE S: /DELETE 2>NULL
 PING 127.0.0.1 >NULL
 
 
+
+REM Change ever service and server '\\' for the IP Address of the SAGE/Syracuse Service server and the name of the service
+REM **********************************************************************************************************************
 
 @ECHO Starting Services
 @ECHO =================
@@ -148,19 +163,20 @@ SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO.
 @ECHO.
 
+
+
 SET ENDSCRIPT= %date%-%time:~0,-6%
 
 
 
+REM Change the text of the end backup if you want! :)
+
 DEL bodymail.txt
-
-
-
 @ECHO Realizado el Backup de datos SRSAGE02: >>bodymail.txt
 @ECHO. >>bodymail.txt
-@ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ] >>bodymail.txt
-@ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ] >>bodymail.txt
-@ECHO DESTINO: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate% ] >>bodymail.txt
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR1% ] >>bodymail.txt
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR2% ] >>bodymail.txt
+@ECHO TARGET:  [ %LABEL2% %TARGETDIR% ] >>bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO        Los backup destino se han comprimido con 7za para ahorrar espacio >>bodymail.txt
 @ECHO        Usar 7za para descomprimir >>bodymail.txt
@@ -170,7 +186,7 @@ DEL bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO START: %STARTSCRIPT% >>bodymail.txt
-@ECHO END:    %ENDSCRIPT% >>bodymail.txt
+@ECHO END:   %ENDSCRIPT% >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO. >>bodymail.txt
 @ECHO. >>bodymail.txt
@@ -185,8 +201,9 @@ MORE 7za_log_SafeX3.txt>>bodymail.txt
 @ECHO. >>bodymail.txt
 
 
-BLAT -INSTALL previlabor-com.mail.protection.outlook.com Backup_Datos_SRSAGE02@previlabor.com 10
-BLAT bodymail.txt -subject "Fin del Backup de datos SRSAGE02 %OnlyDate%" -tf EmailsAddress.txt
+
+BLAT -INSTALL %SMTP_SERVER% %EMAIL_FROM% 10
+BLAT bodymail.txt -subject %SUBJECT_EMAIL% -tf EmailsAddress.txt
 
 
 
@@ -195,7 +212,7 @@ BLAT bodymail.txt -subject "Fin del Backup de datos SRSAGE02 %OnlyDate%" -tf Ema
 @ECHO END OF SCRIPT
 @ECHO ===============================
 @ECHO START: %STARTSCRIPT%
-@ECHO END:    %ENDSCRIPT%
+@ECHO END:   %ENDSCRIPT%
 @ECHO ===============================
 @ECHO.
 PING 127.0.0.1 >NULL
