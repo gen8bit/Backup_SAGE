@@ -1,0 +1,18 @@
+Realizado el Backup de datos SRSAGE02: 
+ 
+ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ] 
+ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ] 
+DESTINO: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\24-01-2018 ] 
+ 
+       Los backup destino se han comprimido con 7za para ahorrar espacio 
+       Usar 7za para descomprimir 
+ 
+Este correo esta automatizado, no responda a la direccion de origen. 
+ 
+ 
+===============================  
+INICIO:  24/01/2018-21:48:11,54 
+FIN:     24/01/2018-23:57:45,73 
+===============================  
+ 
+IT Team 
