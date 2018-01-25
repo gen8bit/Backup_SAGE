@@ -94,9 +94,9 @@ PING 127.0.0.1 -n 120 >NULL
 
 
 
-@ECHO =====================
-@ECHO BACKUP in progress...
-@ECHO =====================
+@ECHO ==================================
+@ECHO BACKUP in progress, please wait...
+@ECHO ==================================
 @ECHO.
 @ECHO.
 
@@ -176,8 +176,8 @@ DEL bodymail.txt
 @ECHO scripts name: %~nx0% >>bodymail.txt
 @ECHO Location: %~d0%~p0 >>bodymail.txt
 @ECHO ================================================  >>bodymail.txt
-@ECHO START: %STARTSCRIPT% >>bodymail.txt
-@ECHO END:   %ENDSCRIPT% >>bodymail.txt
+@ECHO START: %STARTSCRIPT%h >>bodymail.txt
+@ECHO END:   %ENDSCRIPT%h >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO LOG 7za: >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
@@ -199,8 +199,8 @@ BLAT bodymail.txt -subject "%SUBJECT_EMAIL%" -tf EmailsAddress.txt
 @ECHO ===============================
 @ECHO END OF SCRIPT
 @ECHO ===============================
-@ECHO START: %STARTSCRIPT%
-@ECHO END:   %ENDSCRIPT%
+@ECHO START: %STARTSCRIPT%h
+@ECHO END:   %ENDSCRIPT%h
 @ECHO ===============================
 @ECHO.
 PING 127.0.0.1 >NULL
