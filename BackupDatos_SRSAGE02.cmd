@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.4
+@ECHO Version 1.5
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -78,15 +78,11 @@ PING 127.0.0.1 -n 10>NULL
 @ECHO.
 
 
-
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
-
 C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
-
-C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB\MongoDB.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
-
+C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3\SafeX3.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
 
 
 ECHO S|NET USE S: /DELETE 2>NULL
@@ -113,10 +109,6 @@ PING 127.0.0.1 -n 10>NULL
 
 
 SET FIN= %date%-%time%
-
-
-C:
-CD C:\Scripts\BackupSAGE02
 
 
 
