@@ -1,7 +1,7 @@
 CLS
 @ECHO OFF
 COLOR 0A
-SET INICIO= %date%-%time%
+SET INICIO= %date%-%time:~0,-6%
 PROMPT $G
 TITLE -=BACKUP data SRSAGE02
 SET COPYCMD=Y
@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.5
+@ECHO Version 1.6
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -25,7 +25,6 @@ PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
 
 REM El disco USB destino tiene que estar pinchado en la maquina que ejecuta este script y tener la letra K:\
-
 
 
 
@@ -40,11 +39,11 @@ SET OnlyDate=%date:/=-%
 
 @ECHO =====================================================================================
 @ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.49\D$\SAGE\PREVX3 ]
-@ECHO ORIGEN:  [ Disco D: SRSAGE02 [\\192.168.110.58\D$\SAGE\SafeX3\MongoDB ]
+@ECHO ORIGEN:  [ Disco D: SRSAGE02 \\192.168.110.58\D$\SAGE\SafeX3\MongoDB ]
 @ECHO DESTINO: [ Disco USB K: SRVM02 \\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate% ]
 @ECHO =====================================================================================
 @ECHO.
-
+@ECHO.
 
 
 ECHO S|NET USE S: /DELETE /Y  2>NULL
@@ -52,74 +51,103 @@ NET USE S: \\192.168.110.49\D$  2>NULL
 PING 127.0.0.1 >NULL
 
 
-@ECHO Stoping Services
+
+@ECHO Stopping Services
 @ECHO ================
-@ECHO Stoping "ImportacionDatosINTEGRA" Service
-SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA"
+@ECHO Stopping "ImportacionDatosINTEGRA" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-@ECHO Stoping "Agent Sage Syracuse - NODE0" Service
-SC \\192.168.110.49 STOP "Agent Sage Syracuse - NODE0"
+SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Stopping "Agent Sage Syracuse - NODE0" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-@ECHO Stoping "PREVX3" Service
-SC \\192.168.110.49 STOP "PREVX3"
+SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Stopping "PREVX3" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "PREVX3" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-@ECHO Stoping "MongoDB Enterprise for Sage X3 - MONGO01" Service
-SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01"
+SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Stopping "MongoDB Enterprise for Sage X3 - MONGO01" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-
-@ECHO ==================
-@ECHO HACIENDO BACKUP...
-@ECHO ==================
+SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Stopping "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "ESTADO"
+PING 127.0.0.1 -n 10>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO.
 @ECHO.
+
+
+
+@ECHO =====================
+@ECHO BACKUP in progress...
+@ECHO =====================
+@ECHO.
+@ECHO.
+
 
 
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
-C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
-C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3\SafeX3.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
+C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe -bb C:\Scripts\BackupSAGE02\7za_log_PREVX3.txt
+C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3\SafeX3.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe -bb C:\Scripts\BackupSAGE02\7za_log_SafeX3.txt
+@ECHO.
+@ECHO.
+
 
 
 ECHO S|NET USE S: /DELETE 2>NULL
 PING 127.0.0.1 >NULL
 
 
+
 @ECHO Starting Services
 @ECHO =================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
-SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01"
+@ECHO ===========================================================
+SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
+SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO Starting "PREVX3" Service
-SC \\192.168.110.49 START "PREVX3"
+@ECHO ===========================================================
+SC \\192.168.110.49 START "PREVX3" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
+SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO Starting "Agent Sage Syracuse - NODE0" Service
-SC \\192.168.110.49 START "Agent Sage Syracuse - NODE0"
+@ECHO ===========================================================
+SC \\192.168.110.49 START "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-@ECHO Stoping "ImportacionDatosINTEGRA" Service
-SC \\192.168.110.49 START "ImportacionDatosINTEGRA"
+SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Starting "ImportacionDatosINTEGRA" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
-
-
-SET FIN= %date%-%time%
-
-
-
+SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Starting "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
+PING 127.0.0.1 -n 10>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO.
-@ECHO ===============================
-@ECHO FIN DEL SCRIPT
-@ECHO ===============================
-@ECHO INICIO: %INICIO%
-@ECHO FIN:    %FIN%
-@ECHO ===============================
 @ECHO.
+
+SET FIN= %date%-%time:~0,-6%
 
 
 
@@ -144,8 +172,16 @@ DEL bodymail.txt
 @ECHO FIN:    %FIN% >>bodymail.txt
 @ECHO ===============================  >>bodymail.txt
 @ECHO. >>bodymail.txt
+@ECHO. >>bodymail.txt
+@ECHO ===============================  >>bodymail.txt
+@ECHO LOG 7za >>bodymail.txt
+@ECHO ===============================  >>bodymail.txt
+@ECHO. >>bodymail.txt
+MORE 7za_log_PREVX3.txt>>bodymail.txt
+MORE 7za_log_SafeX3.txt>>bodymail.txt
+@ECHO ===============================  >>bodymail.txt
 @ECHO IT Team >>bodymail.txt
-
+@ECHO. >>bodymail.txt
 
 
 BLAT -INSTALL previlabor-com.mail.protection.outlook.com Backup_Datos_SRSAGE02@previlabor.com 10
@@ -153,6 +189,14 @@ BLAT bodymail.txt -subject "Fin del Backup de datos SRSAGE02 %OnlyDate%" -tf Ema
 
 
 
+@ECHO.
+@ECHO ===============================
+@ECHO FIN DEL SCRIPT
+@ECHO ===============================
+@ECHO INICIO: %INICIO%
+@ECHO FIN:    %FIN%
+@ECHO ===============================
+@ECHO.
 PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
 
