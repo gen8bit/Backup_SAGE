@@ -184,7 +184,7 @@ DEL bodymail.txt
 @ECHO. >>bodymail.txt
 MORE 7za_log_PREVX3.txt >>bodymail.txt
 MORE 7za_log_SafeX3.txt >>bodymail.txt
-@ECHO ================================================  >>bodymail.txt
+@ECHO ===============================================================  >>bodymail.txt
 @ECHO IT Team >>bodymail.txt
 @ECHO. >>bodymail.txt
 
