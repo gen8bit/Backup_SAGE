@@ -10,10 +10,8 @@ SET COPYCMD=Y
 
 @ECHO ===============================================
 @ECHO Backup Data SRSAGE02
-@ECHO (c) Previlabor 2018
 @ECHO Author: Angel Pescador Portas
-@ECHO email: apescador@previlabor.com
-@ECHO email: tic@previlabor.com
+@ECHO email: angel.pescador@gmail.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
 @ECHO Version 1.8
