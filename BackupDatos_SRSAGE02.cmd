@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.1
+@ECHO Version 1.2
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -65,11 +65,19 @@ PING 127.0.0.1 >NULL
 @ECHO ================
 @ECHO Stoping "Agent Sage Syracuse - NODE0" Service
 SC \\192.168.110.49 STOP "Agent Sage Syracuse - NODE0"
+PING 127.0.0.1 -n 10>NULL
+
 @ECHO Stoping "PREVX3" Service
 SC \\192.168.110.49 STOP "PREVX3"
+PING 127.0.0.1 -n 10>NULL
+
 @ECHO Stoping "MongoDB Enterprise for Sage X3 - MONGO01" Service
 SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01"
+PING 127.0.0.1 -n 10>NULL
 
+@ECHO Stoping "ImportacionDatosINTEGRA" Service
+SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA"
+PING 127.0.0.1 -n 10>NULL
 
 
 @ECHO ==================
@@ -81,7 +89,7 @@ SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01"
 
 
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
-ROBOCOPY "S:\SAGE\PREVX3" "K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3" /MIR /NJH /NJS /R:1 /W:1 /MT:8 /XD S:\SAGE\PREVX3\folders\PREVILAB\TRA\ S:\SAGE\PREVX3\folders\PREVILAB\SVG\ S:\SAGE\PREVX3\folders\PREVILAB\SVG_ADOCCLB\ S:\SAGE\PREVX3\folders\PREVILAB\SVG77701\ S:\SAGE\PREVX3\folders\COPIA\
+ROBOCOPY "S:\SAGE\PREVX3" "K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3" /MIR /NJH /NJS /R:1 /W:1 /MT:8 /XD S:\SAGE\PREVX3\folders\PREVILAB\TRA\ S:\SAGE\PREVX3\folders\PREVILAB\SVG\ S:\SAGE\PREVX3\folders\PREVILAB\SVG_ADOCCLB\ S:\SAGE\PREVX3\folders\PREVILAB\SVG77701\ S:\SAGE\PREVX3\folders\COPIA\ S:\SAGE\PREVX3\folders\PROTO D:\SAGE\PREVX3\folders\COPIA S:\SAGE\PREVX3\folders\SEED S:\SAGE\PREVX3\folders\X3_PUB\PROTO S:\SAGE\PREVX3\folders\X3_PUB\COPIA S:\SAGE\PREVX3\folders\X3_PUB\SEED
 ROBOCOPY "S:\SAGE\SafeX3\MongoDB" "K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB" /MIR /NJH /NJS /R:1 /W:1 /MT:8
 
 
@@ -95,19 +103,27 @@ PING 127.0.0.1 >NULL
 @ECHO =================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01"
+PING 127.0.0.1 -n 10>NULL
+
 @ECHO Starting "PREVX3" Service
 SC \\192.168.110.49 START "PREVX3"
+PING 127.0.0.1 -n 10>NULL
+
 @ECHO Starting "Agent Sage Syracuse - NODE0" Service
 SC \\192.168.110.49 START "Agent Sage Syracuse - NODE0"
+PING 127.0.0.1 -n 10>NULL
 
-
+@ECHO Stoping "ImportacionDatosINTEGRA" Service
+SC \\192.168.110.49 START "ImportacionDatosINTEGRA"
+PING 127.0.0.1 -n 10>NULL
 
 TITLE -=COMPRIMIENDO BACKUPS SRSAGE02=-
 
 
 
 K:
-CD K:\BackupDatos\SRSAGE02\%OnlyDate%
+CD \BackupDatos\SRSAGE02\%OnlyDate%
+
 
 
 
