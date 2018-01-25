@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: BackupDatos_SRSAGE02.cmd
 @ECHO Location: C:\Scripts\BackupSAGE02\
-@ECHO Version 1.3
+@ECHO Version 1.4
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -26,14 +26,6 @@ PING 127.0.0.1 >NULL
 
 REM El disco USB destino tiene que estar pinchado en la maquina que ejecuta este script y tener la letra K:\
 
-
-
-@ECHO Borrando copias anteriores a 61 dias, encontradas:
-@ECHO.
-REM keep only 61 backup
-forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH" 2>nul | find ":" /c
-@ECHO.
-@ECHO.
 
 
 
@@ -60,9 +52,12 @@ NET USE S: \\192.168.110.49\D$  2>NULL
 PING 127.0.0.1 >NULL
 
 
-
 @ECHO Stoping Services
 @ECHO ================
+@ECHO Stoping "ImportacionDatosINTEGRA" Service
+SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA"
+PING 127.0.0.1 -n 10>NULL
+
 @ECHO Stoping "Agent Sage Syracuse - NODE0" Service
 SC \\192.168.110.49 STOP "Agent Sage Syracuse - NODE0"
 PING 127.0.0.1 -n 10>NULL
@@ -74,11 +69,6 @@ PING 127.0.0.1 -n 10>NULL
 @ECHO Stoping "MongoDB Enterprise for Sage X3 - MONGO01" Service
 SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01"
 PING 127.0.0.1 -n 10>NULL
-
-@ECHO Stoping "ImportacionDatosINTEGRA" Service
-SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA"
-PING 127.0.0.1 -n 10>NULL
-
 
 
 @ECHO ==================
@@ -92,6 +82,7 @@ PING 127.0.0.1 -n 10>NULL
 MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
+
 C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3\PREVX3.7z S:\SAGE\PREVX3\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
 
 C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB\MongoDB.7z S:\SAGE\SafeX3\MongoDB\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@C:\Scripts\BackupSAGE02\exclude.txt -pTxindoki1346 -mhe
@@ -100,7 +91,6 @@ C:\Scripts\BackupSAGE02\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\MongoDB\Mon
 
 ECHO S|NET USE S: /DELETE 2>NULL
 PING 127.0.0.1 >NULL
-
 
 
 @ECHO Starting Services
@@ -120,24 +110,6 @@ PING 127.0.0.1 -n 10>NULL
 @ECHO Stoping "ImportacionDatosINTEGRA" Service
 SC \\192.168.110.49 START "ImportacionDatosINTEGRA"
 PING 127.0.0.1 -n 10>NULL
-
-TITLE -=COMPRIMIENDO BACKUPS SRSAGE02=-
-
-
-
-K:
-CD \BackupDatos\SRSAGE02\%OnlyDate%
-
-
-
-for /d %%X in (*) do (
- 	ECHO %%X
- 	MKDIR "%%X_7ZA"
- 	ECHO S|DEL "K:\BackupDatos\SRSAGE02\%OnlyDate%\%%X_7ZA\*.*" /S /Q
- 	C:\Scripts\BackupINTEGRA\7za.exe a "K:\BackupDatos\SRSAGE02\%OnlyDate%\%%X_7ZA\%%X.7z" "K:\BackupDatos\SRSAGE02\%OnlyDate%\*.*" -r -V1G -bt -y -mx=9 -ms=on -pTxindoki1346 -mhe -sdel
- 	ECHO S|RD "K:\BackupDatos\SRSAGE02\%OnlyDate%\%%X" /S /Q
-)
-
 
 
 SET FIN= %date%-%time%
