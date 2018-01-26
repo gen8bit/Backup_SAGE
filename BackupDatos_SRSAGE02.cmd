@@ -14,7 +14,7 @@ SET COPYCMD=Y
 @ECHO email: angel.pescador@gmail.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.8
+@ECHO Version 1.9
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -127,6 +127,12 @@ Change ever service and server '\\' for the IP Address of the SAGE/Syracuse Serv
 
 @ECHO Starting Services
 @ECHO =================
+@ECHO Starting "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
+PING 127.0.0.1 -n 10>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
@@ -150,12 +156,6 @@ SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 SC \\192.168.110.49 START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
 SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
-@ECHO ===========================================================
-@ECHO Starting "MSSQL$SAGE" Service
-@ECHO ===========================================================
-SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO.
 @ECHO.
@@ -214,5 +214,4 @@ BLAT bodymail.txt -subject "%SUBJECT_EMAIL%" -tf EmailsAddress.txt
 @ECHO.
 PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
-pause
 EXIT
