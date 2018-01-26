@@ -94,6 +94,15 @@ PING 127.0.0.1 -n 120 >NULL
 
 
 
+@ECHO Borrando copias anteriores a 61 dias, encontradas:
+@ECHO.
+REM keep only 61 backup
+forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH" 2>nul | find ":" /c
+@ECHO.
+@ECHO.
+
+
+
 @ECHO ==================================
 @ECHO BACKUP in progress, please wait...
 @ECHO ==================================
