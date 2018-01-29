@@ -10,11 +10,13 @@ SET COPYCMD=Y
 
 @ECHO ===============================================
 @ECHO Backup Data SRSAGE02
+@ECHO (c) Previlabor 2018
 @ECHO Author: Angel Pescador Portas
-@ECHO email: angel.pescador@gmail.com
+@ECHO email: apescador@previlabor.com
+@ECHO email: tic@previlabor.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.9
+@ECHO Version 1.901
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -22,7 +24,7 @@ SET COPYCMD=Y
 PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
 
-The destination USB disk has to be in the machine that executes this script whit the letter K:
+REM The destination USB disk has to be in the machine that executes this script whit the letter K:
 
 SET _my_datetime=%date%_%time%
 SET _my_datetime=%_my_datetime: =_%
@@ -57,7 +59,13 @@ SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
 
 
 @ECHO Stopping Services
-@ECHO =================
+@ECHO ================
+@ECHO Stopping "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "STA"
+PING 127.0.0.1 -n 10>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "STA"
+@ECHO ===========================================================
 @ECHO Stopping "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA" | FIND /I "STA"
@@ -82,30 +90,149 @@ SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "S
 PING 127.0.0.1 -n 10>NULL
 SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
 @ECHO ===========================================================
-@ECHO Stopping "MSSQL$SAGE" Service
-@ECHO ===========================================================
-SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "STA"
-@ECHO ===========================================================
 @ECHO.
 @ECHO.
 PING 127.0.0.1 -n 120 >NULL
 
 
 
-@ECHO Borrando copias anteriores a 61 dias, encontradas:
 @ECHO.
-REM keep only 61 backup
-forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH" 2>nul | find ":" /c
-@ECHO.
+@ECHO ==================================================
+@ECHO Borrando copias anteriores a 61 dias
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+, encontradas:
+
+REM
+
+
+
+
+
+
+
+
+
+
+ keep only 61 backup
+
+
+forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 2>nul | find ":" /c
+
+@ECHO ==================================================
+
 @ECHO.
 
 
 
-@ECHO ==================================
-@ECHO BACKUP in progress, please wait...
-@ECHO ==================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@ECHO.
+
+
+
+
+@ECHO =====================
+@ECHO BACKUP in progress...
+@ECHO =====================
 @ECHO.
 @ECHO.
 
@@ -127,12 +254,6 @@ Change ever service and server '\\' for the IP Address of the SAGE/Syracuse Serv
 
 @ECHO Starting Services
 @ECHO =================
-@ECHO Starting "MSSQL$SAGE" Service
-@ECHO ===========================================================
-SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
-@ECHO ===========================================================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
@@ -156,6 +277,12 @@ SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 SC \\192.168.110.49 START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 10>NULL
 SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
+@ECHO ===========================================================
+@ECHO Starting "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
+PING 127.0.0.1 -n 10>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO.
 @ECHO.
@@ -208,10 +335,11 @@ BLAT bodymail.txt -subject "%SUBJECT_EMAIL%" -tf EmailsAddress.txt
 @ECHO ===============================
 @ECHO END OF SCRIPT
 @ECHO ===============================
-@ECHO START: %STARTSCRIPT%h
-@ECHO END:   %ENDSCRIPT%h
+@ECHO START: %STARTSCRIPT%
+@ECHO END:   %ENDSCRIPT%
 @ECHO ===============================
 @ECHO.
 PING 127.0.0.1 >NULL
 PING 127.0.0.1 >NULL
+
 EXIT
