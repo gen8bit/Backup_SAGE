@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.901
+@ECHO Version 1.902
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -60,36 +60,37 @@ SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
 
 @ECHO Stopping Services
 @ECHO ================
-@ECHO Stopping "MSSQL$SAGE" Service
-@ECHO ===========================================================
-SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "STA"
-@ECHO ===========================================================
 @ECHO Stopping "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 STOP "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "PREVX3" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 STOP "PREVX3" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
 @ECHO ===========================================================
+@ECHO Stopping "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "STA"
+PING 127.0.0.1 -n 20>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "STA"
+@ECHO ===========================================================
+
 @ECHO.
 @ECHO.
 PING 127.0.0.1 -n 120 >NULL
@@ -134,7 +135,6 @@ PING 127.0.0.1 -n 120 >NULL
 
 
 , encontradas:
-
 REM
 
 
@@ -147,7 +147,6 @@ REM
 
 
  keep only 61 backup
-
 
 forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH"
 
@@ -167,14 +166,8 @@ forfiles -p "K:\BackupDatos\SRSAGE02" -d -61 -c "cmd /c rmdir /s /q @PATH"
 
 
  2>nul | find ":" /c
-
 @ECHO ==================================================
-
 @ECHO.
-
-
-
-
 
 
 
@@ -254,36 +247,35 @@ Change ever service and server '\\' for the IP Address of the SAGE/Syracuse Serv
 
 @ECHO Starting Services
 @ECHO =================
+@ECHO Starting "MSSQL$SAGE" Service
+@ECHO ===========================================================
+SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
+PING 127.0.0.1 -n 20>NULL
+SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
+@ECHO ===========================================================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "PREVX3" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "PREVX3" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
 SC \\192.168.110.49 START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
+PING 127.0.0.1 -n 20>NULL
 SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
-@ECHO ===========================================================
-@ECHO Starting "MSSQL$SAGE" Service
-@ECHO ===========================================================
-SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 10>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
-@ECHO ===========================================================
 @ECHO.
 @ECHO.
 
