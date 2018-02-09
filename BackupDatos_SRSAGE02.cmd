@@ -44,6 +44,7 @@ SET LABEL1=Disco D: SRSAGE02
 SET LABEL2=Disco USB K: SRVM02
 SET LABEL3=
 SET IPSAGESrv=192.168.110.49
+SET Pwd7zaEncript=Txindoki1346
 SET EMAIL_FROM=Backup_Datos_SRSAGE02@previlabor.com
 SET SUBJECT_EMAIL=Fin del Backup de datos SRSAGE02 %OnlyDate%
 SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
@@ -121,8 +122,8 @@ MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
 
-%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3.7z %SOURCEDIR1%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -pTxindoki1346 -mhe >%WorkingDIR%7za_log_PREVX3.txt
-%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -pTxindoki1346 -mhe >%WorkingDIR%7za_log_SafeX3.txt
+%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3.7z %SOURCEDIR1%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -p%Pwd7zaEncript% -mhe >%WorkingDIR%7za_log_PREVX3.txt
+%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -p%Pwd7zaEncript% -mhe >%WorkingDIR%7za_log_SafeX3.txt
 @ECHO.
 @ECHO.
 
