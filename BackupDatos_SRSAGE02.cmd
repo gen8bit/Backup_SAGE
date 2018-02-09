@@ -16,13 +16,13 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.902
+@ECHO Version 1.903
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
 @ECHO.
-PING 127.0.0.1 >NULL
-PING 127.0.0.1 >NULL
+PING 127.0.0.1 -n 8>NUL
+
 
 REM The destination USB disk has to be in the machine that executes this script whit the letter K:
 
@@ -32,7 +32,7 @@ SET _my_datetime=%_my_datetime::=%
 SET _my_datetime=%_my_datetime:/=_%
 SET _my_datetime=%_my_datetime:.=_%
 SET OnlyDate=%date:/=-%
-
+SET WorkingDIR=%~d0%~p0
 
 
 VARIABLES (Change and review please)
@@ -43,6 +43,7 @@ SET TARGETDIR=\\192.168.110.21\k$\BackupDatos\SRSAGE02\%OnlyDate%
 SET LABEL1=Disco D: SRSAGE02
 SET LABEL2=Disco USB K: SRVM02
 SET LABEL3=
+SET IPSAGESrv=192.168.110.49
 SET EMAIL_FROM=Backup_Datos_SRSAGE02@previlabor.com
 SET SUBJECT_EMAIL=Fin del Backup de datos SRSAGE02 %OnlyDate%
 SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
@@ -62,38 +63,38 @@ SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
 @ECHO ================
 @ECHO Stopping "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 STOP "ImportacionDatosINTEGRA" | FIND /I "STA"
+SC \\%IPSAGESrv% STOP "ImportacionDatosINTEGRA" | FIND /I "STA"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "STA"
+SC \\%IPSAGESrv% QUERY "ImportacionDatosINTEGRA" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 STOP "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
+SC \\%IPSAGESrv% STOP "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
+SC \\%IPSAGESrv% QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "PREVX3" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 STOP "PREVX3" | FIND /I "STA"
+SC \\%IPSAGESrv% STOP "PREVX3" | FIND /I "STA"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "STA"
+SC \\%IPSAGESrv% QUERY "PREVX3" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
+SC \\%IPSAGESrv% STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
+SC \\%IPSAGESrv% QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "MSSQL$SAGE" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 STOP "MSSQL$SAGE" | FIND /I "STA"
+SC \\%IPSAGESrv% STOP "MSSQL$SAGE" | FIND /I "STA"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "STA"
+SC \\%IPSAGESrv% QUERY "MSSQL$SAGE" | FIND /I "STA"
 @ECHO ===========================================================
 
 @ECHO.
 @ECHO.
-PING 127.0.0.1 -n 120 >NULL
+PING 127.0.0.1 -n 120 >NUL
 
 
 
@@ -120,47 +121,44 @@ MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 
 
 
-.\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3.7z %SOURCEDIR1%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@exclude.txt -pTxindoki1346 -mhe >7za_log_PREVX3.txt
-.\7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@exclude.txt -pTxindoki1346 -mhe >7za_log_SafeX3.txt
+%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\PREVX3.7z %SOURCEDIR1%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -pTxindoki1346 -mhe >%WorkingDIR%7za_log_PREVX3.txt
+%WorkingDIR%7za.exe a K:\BackupDatos\SRSAGE02\%OnlyDate%\SafeX3.7z %SOURCEDIR2%\*.* -r -V1G -bt -y -mx=9 -ms=on -t7z -xr@%WorkingDIR%exclude.txt -pTxindoki1346 -mhe >%WorkingDIR%7za_log_SafeX3.txt
 @ECHO.
 @ECHO.
 
 
-
-Change ever service and server '\\' for the IP Address of the SAGE/Syracuse Service server and the name of the service
-**********************************************************************************************************************
 
 @ECHO Starting Services
 @ECHO =================
 @ECHO Starting "MSSQL$SAGE" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 START "MSSQL$SAGE" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% START "MSSQL$SAGE" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "PREVX3" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 START "PREVX3" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% START "PREVX3" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "PREVX3" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% QUERY "PREVX3" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 START "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% START "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
-SC \\192.168.110.49 START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 PING 127.0.0.1 -n 20>NULL
-SC \\192.168.110.49 QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
+SC \\%IPSAGESrv% QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 @ECHO.
 @ECHO.
 
@@ -173,38 +171,39 @@ SET ENDSCRIPT= %date%-%time:~0,-6%
 Change the text of the end backup if you want! :)
 
 DEL bodymail.txt
-@ECHO Realizado el Backup de datos SRSAGE02: >>bodymail.txt
-@ECHO. >>bodymail.txt
-@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR1% ] >>bodymail.txt
-@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR2% ] >>bodymail.txt
-@ECHO TARGET:  [ %LABEL2% %TARGETDIR% ] >>bodymail.txt
-@ECHO. >>bodymail.txt
-@ECHO        Los backup destino se han comprimido con 7za para ahorrar espacio >>bodymail.txt
-@ECHO        Usar 7za para descomprimir >>bodymail.txt
-@ECHO. >>bodymail.txt
-@ECHO Este correo esta automatizado, no responda a la direccion de origen. >>bodymail.txt
-@ECHO. >>bodymail.txt
-@ECHO. >>bodymail.txt
-@ECHO ================================================  >>bodymail.txt
-@ECHO scripts name: %~nx0% >>bodymail.txt
-@ECHO Location: %~d0%~p0 >>bodymail.txt
-@ECHO ================================================  >>bodymail.txt
-@ECHO START: %STARTSCRIPT%h >>bodymail.txt
-@ECHO END:   %ENDSCRIPT%h >>bodymail.txt
-@ECHO ===============================  >>bodymail.txt
-@ECHO LOG 7za: >>bodymail.txt
-@ECHO ===============================  >>bodymail.txt
-@ECHO. >>bodymail.txt
-MORE 7za_log_PREVX3.txt >>bodymail.txt
-MORE 7za_log_SafeX3.txt >>bodymail.txt
-@ECHO ===============================================================  >>bodymail.txt
-@ECHO IT Team >>bodymail.txt
-@ECHO. >>bodymail.txt
+@ECHO Realizado el Backup de datos SRSAGE02: >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR1% ] >>%WorkingDIR%bodymail.txt
+@ECHO SOURCE:  [ %LABEL1% %SOURCEDIR2% ] >>%WorkingDIR%bodymail.txt
+@ECHO TARGET:  [ %LABEL2% %TARGETDIR% ] >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+@ECHO        Los backup destino se han comprimido con 7za para ahorrar espacio >>%WorkingDIR%bodymail.txt
+@ECHO        Usar 7za para descomprimir >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+@ECHO Este correo esta automatizado, no responda a la direccion de origen. >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+@ECHO ================================================  >>%WorkingDIR%bodymail.txt
+@ECHO scripts name: %~nx0% >>%WorkingDIR%bodymail.txt
+@ECHO Location: %~d0%~p0 >>%WorkingDIR%bodymail.txt
+@ECHO ================================================  >>%WorkingDIR%bodymail.txt
+@ECHO START: %STARTSCRIPT%h >>%WorkingDIR%bodymail.txt
+@ECHO END:   %ENDSCRIPT%h >>%WorkingDIR%bodymail.txt
+@ECHO ===============================  >>%WorkingDIR%bodymail.txt
+@ECHO LOG 7za: >>%WorkingDIR%bodymail.txt
+@ECHO ===============================  >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
+MORE 7za_log_PREVX3.txt >>%WorkingDIR%bodymail.txt
+@ECHO ===============================================================  >>%WorkingDIR%bodymail.txt
+MORE 7za_log_SafeX3.txt >>%WorkingDIR%bodymail.txt
+@ECHO ===============================================================  >>%WorkingDIR%bodymail.txt
+@ECHO IT Team >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
 
 
 
-BLAT -INSTALL %SMTP_SERVER% %EMAIL_FROM% 10
-BLAT bodymail.txt -subject "%SUBJECT_EMAIL%" -tf EmailsAddress.txt
+%WorkingDIR%BLAT -INSTALL %SMTP_SERVER% %EMAIL_FROM% 10
+%WorkingDIR%BLAT %WorkingDIR%bodymail.txt -subject "%SUBJECT_EMAIL%" -tf %WorkingDIR%EmailsAddress.txt
 
 
 
@@ -216,7 +215,7 @@ BLAT bodymail.txt -subject "%SUBJECT_EMAIL%" -tf EmailsAddress.txt
 @ECHO END:   %ENDSCRIPT%
 @ECHO ===============================
 @ECHO.
-PING 127.0.0.1 >NULL
-PING 127.0.0.1 >NULL
+PING 127.0.0.1 -n 8>NUL
+
 
 EXIT
