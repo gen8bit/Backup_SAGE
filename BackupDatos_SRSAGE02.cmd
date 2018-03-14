@@ -16,12 +16,13 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.904
-@ECHO Date: 22/01/2018
+@ECHO Version 1.905
+@ECHO Date:   22/01/2018
+@ECHO Update: 14/03/2018
 @ECHO ===============================================
 @ECHO.
 @ECHO.
-PING 127.0.0.1 -n 8>NUL
+PING 127.0.0.1 -n 8 >NUL
 
 
 REM The destination USB disk has to be in the machine that executes this script whit the letter K:
@@ -65,31 +66,31 @@ SET SMTP_SERVER=previlabor-com.mail.protection.outlook.com
 @ECHO Stopping "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% STOP "ImportacionDatosINTEGRA" | FIND /I "STA"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "ImportacionDatosINTEGRA" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% STOP "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "PREVX3" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% STOP "PREVX3" | FIND /I "STA"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "PREVX3" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% STOP "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "STA"
 @ECHO ===========================================================
 @ECHO Stopping "MSSQL$SAGE" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% STOP "MSSQL$SAGE" | FIND /I "STA"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "MSSQL$SAGE" | FIND /I "STA"
 @ECHO ===========================================================
 
@@ -134,31 +135,31 @@ MKDIR K:\BackupDatos\SRSAGE02\%OnlyDate%
 @ECHO Starting "MSSQL$SAGE" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% START "MSSQL$SAGE" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "MSSQL$SAGE" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "MongoDB Enterprise for Sage X3 - MONGO01" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% START "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "MongoDB Enterprise for Sage X3 - MONGO01" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "PREVX3" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% START "PREVX3" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "PREVX3" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "Agent Sage Syracuse - NODE0" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% START "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "Agent_Sage_Syracuse_-_NODE0" | FIND /I "ESTADO"
 @ECHO ===========================================================
 @ECHO Starting "ImportacionDatosINTEGRA" Service
 @ECHO ===========================================================
 SC \\%IPSAGESrv% START "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
-PING 127.0.0.1 -n 20>NULL
+PING 127.0.0.1 -n 20 >NUL
 SC \\%IPSAGESrv% QUERY "ImportacionDatosINTEGRA" | FIND /I "ESTADO"
 @ECHO.
 @ECHO.
@@ -217,7 +218,7 @@ MORE 7za_log_SafeX3.txt >>%WorkingDIR%bodymail.txt
 @ECHO END:   %ENDSCRIPT%
 @ECHO ===============================
 @ECHO.
-PING 127.0.0.1 -n 8>NUL
+PING 127.0.0.1 -n 8 >NUL
 
 
 EXIT
