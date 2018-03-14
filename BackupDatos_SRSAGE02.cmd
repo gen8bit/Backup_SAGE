@@ -16,7 +16,7 @@ SET COPYCMD=Y
 @ECHO email: tic@previlabor.com
 @ECHO scripts name: %~nx0%
 @ECHO Location: %~d0%~p0
-@ECHO Version 1.903
+@ECHO Version 1.904
 @ECHO Date: 22/01/2018
 @ECHO ===============================================
 @ECHO.
@@ -176,6 +176,7 @@ DEL bodymail.txt
 @ECHO. >>%WorkingDIR%bodymail.txt
 @ECHO SOURCE:  [ %LABEL1% %SOURCEDIR1% ] >>%WorkingDIR%bodymail.txt
 @ECHO SOURCE:  [ %LABEL1% %SOURCEDIR2% ] >>%WorkingDIR%bodymail.txt
+@ECHO. >>%WorkingDIR%bodymail.txt
 @ECHO TARGET:  [ %LABEL2% %TARGETDIR% ] >>%WorkingDIR%bodymail.txt
 @ECHO. >>%WorkingDIR%bodymail.txt
 @ECHO        Los backup destino se han comprimido con 7za para ahorrar espacio >>%WorkingDIR%bodymail.txt
